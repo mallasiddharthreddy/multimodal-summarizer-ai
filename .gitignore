@@ -1,0 +1,36 @@
+# === Python & Bytecode ===
+__pycache__/
+*.py[cod]
+*.so
+
+# === Virtual Environment ===
+.venv/
+env/
+venv/
+ENV/
+
+# === OS & Editor Files ===
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# === Jupyter & Colab ===
+.ipynb_checkpoints/
+*.ipynb
+
+# === Model & Large Files ===
+*.h5
+*.pt
+*.pth
+*.onnx
+*.tflite
+
+# === Dataset & Results ===
+data/*.json
+results/*.csv
+
+# === Cache ===
+.cache/
+*.tmp
+*.bak
