@@ -2,11 +2,11 @@
 from transformers import pipeline
 import torch
 
-# Set device based on GPU availability
+
 device = 0 if torch.cuda.is_available() else -1
 
 # Load all summarization models
-bart_summarizer = pipeline("summarization", model="facebook/bart-large-cnn", device=device)
+bart_summarizer = pipeline("summarization", model="models/bart-meetingbank-finetuned", tokenizer="models/bart-meetingbank-finetuned", device=device)
 pegasus_summarizer = pipeline("summarization", model="google/pegasus-xsum", device=device)
 t5_summarizer = pipeline("summarization", model="t5-base", device=device)
 

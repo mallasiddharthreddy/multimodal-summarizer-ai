@@ -7,7 +7,7 @@ from summa import keywords as summa_keywords
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
-# Initialize Hugging Face pipelines
+
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 ner_pipeline = pipeline("ner", model="dslim/bert-base-NER", grouped_entities=True)
@@ -38,7 +38,7 @@ def analyze_sentiment(text):
     result = sentiment_pipeline(text)[0]
     return result['label'], round(result['score'], 3)
 
-# Keyword Extraction using TF-IDF
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def extract_keywords_tfidf(text, top_n=5):

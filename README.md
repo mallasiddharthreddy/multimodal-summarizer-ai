@@ -6,7 +6,7 @@ Audio, Text, and Document Summarization with Transformer Models + Evaluation UI
 
 # Overview
 
-This project enables users to summarize audio files, raw text, and .docx documents using state-of-the-art transformer models (BART, PEGASUS, T5). The Streamlit interface supports summary generation, model comparison, sentiment analysis, and evaluation metric display. A detailed PDF report is also downloadable.
+This project enables users to summarize audio files, raw text, and .docx documents using state-of-the-art transformer models (BART (Fine-tuned), PEGASUS, T5). The Streamlit interface supports summary generation, model comparison, sentiment analysis, and evaluation metric visualization. A downloadable PDF report is also generated.
 
 
 # Key Features
@@ -15,25 +15,28 @@ This project enables users to summarize audio files, raw text, and .docx documen
 
 ✅ Uses Whisper for audio transcription
 
-✅ Offers BART, PEGASUS, and T5 summarizers
+✅ Offers BART (Fine-tuned), PEGASUS, and T5 summarizers
 
 ✅ Generates summary reports as downloadable PDFs
 
-✅ Computes ROUGE, Cosine Similarity, and BERTScore
+✅ Computes Cosine Similarity and BERTScore
 
 ✅ Includes sentiment analysis of input
 
 ✅ Supports side-by-side model comparison and metric visualization
 
 
+
 # Models Used
 
-| Model   | Task Type    | Source                    |
-| ------- | ------------ | ------------------------- |
-| BART    | Abstractive  | `facebook/bart-large-cnn` |
-| PEGASUS | Abstractive  | `google/pegasus-xsum`     |
-| T5      | Abstractive  | `t5-small`                |
-| Whisper | Audio → Text | `openai/whisper`          |
+| Model             | Task Type    | Source                              |
+| ----------------- | ------------ | ----------------------------------- |
+| BART (Fine-tuned) | Abstractive  | `models/bart-meetingbank-finetuned` |
+| PEGASUS           | Abstractive  | `google/pegasus-xsum`               |
+| T5                | Abstractive  | `t5-small`                          |
+| Whisper           | Audio → Text | `openai/whisper`                    |
+
+
 
 
 # App Interface
@@ -69,26 +72,21 @@ View a full example of the summary and evaluation for an uploaded audio file usi
 
 2) Processing:
 
-2.1) Audio is transcribed using Whisper
+- Audio is transcribed using Whisper
 
-2.2) Text is split into chunks (if long)
+- Text is split into chunks (if lengthy)
 
-3) Summarization: Selected model (BART/PEGASUS/T5) generates summaries
+3) Summarization: Selected model generates summaries
 
-4) Evaluation: Metrics are computed:
+4) Evaluation: Two key metrics are computed:
 
-4.1) ROUGE-1 and ROUGE-L
+- Cosine Similarity (TF-IDF)
 
-4.2) Cosine Similarity (TF-IDF)
+- BERTScore (F1)
 
-4.3) BERTScore
+5) Sentiment Analysis: Performed using TextBlob
 
-5) Sentiment Analysis: Basic polarity detection using TextBlob
-
-6) Export: Generates and downloads a PDF summary report
-
-
-
+6) Export: PDF report is generated for download
 
 
 
@@ -98,8 +96,6 @@ Metrics auto-generated in:
 
 ```bash
   results/summary_outputs.csv
-```
-```bash
   results/model_metrics.csv
 ```
 For graphing:
@@ -113,7 +109,8 @@ For graphing:
 
 
 ```bash
-  multimodal-summarizer-ai/
+
+multimodal-summarizer-ai/
 ├── app/
 │   └── summary_app.py
 ├── core/
@@ -125,7 +122,15 @@ For graphing:
 │   ├── run_metrics.py
 │   └── visualizations.py
 ├── models/
-│   └── summarizers.py
+│   ├── summarizers.py
+│   └── bart-meetingbank-finetuned/
+│       ├── config.json
+│       ├── generation_config.json
+│       ├── merges.txt
+│       ├── model.safetensors
+│       ├── special_tokens_map.json
+│       ├── tokenizer_config.json
+│       └── vocab.json
 ├── results/             #results/ not included in repo(will be auto-generated depending on data/ used)
 │   ├── summary_outputs.csv
 │   └── model_metrics.csv
@@ -135,7 +140,7 @@ For graphing:
 ├── reports/
 │   └── sample_summary_report.pdf
 ├── images/
-│   └──.png (screenshots)
+│   └── .png (screenshots)
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -167,15 +172,7 @@ source .venv/bin/activate
 
 ```
 
-# Deployment
-
-This project is live here:
-
-👉 Launch the App on Streamlit Cloud
-
 # Future Work (Planned for Project + Research Phase)
-
-1) Fine-tuning BART/PEGASUS on domain-specific meeting datasets
 
 2) Training custom summarizers for specialized domains
 

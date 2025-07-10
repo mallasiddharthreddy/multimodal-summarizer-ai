@@ -2,15 +2,15 @@ import re
 import nltk
 from nltk.tokenize import sent_tokenize
 
-# Ensure required NLTK resources are available
+
 nltk.download('punkt')
 
 def clean_text(text):
     """
     Clean input text by removing non-ASCII characters and excess whitespace.
     """
-    text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces/newlines with single space
-    text = re.sub(r'[^\x00-\x7F]+', '', text)  # Remove non-ASCII characters
+    text = re.sub(r'\s+', ' ', text)  
+    text = re.sub(r'[^\x00-\x7F]+', '', text) 
     return text.strip()
 
 def chunk_text(text, max_words=500):

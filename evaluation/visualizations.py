@@ -4,7 +4,7 @@ import pandas as pd
 
 def plot_bar_comparison(df_scores):
     df_scores.set_index("Chunk")[[
-        "BART_SummaryScore",
+        "BART (Fine-tuned)_SummaryScore",
         "PEGASUS_SummaryScore",
         "T5_SummaryScore"
     ]].plot(kind="bar", figsize=(10, 6))
@@ -20,13 +20,12 @@ def plot_bar_comparison(df_scores):
 
 
 def plot_heatmap(df_metrics):
-    # Select only metric columns
     heatmap_data = df_metrics[[
-        "BART_ROUGE-1", "PEGASUS_ROUGE-1", "T5_ROUGE-1",
-        "BART_ROUGE-L", "PEGASUS_ROUGE-L", "T5_ROUGE-L",
-        "BART_BLEU", "PEGASUS_BLEU", "T5_BLEU",
-        "BART_Cosine Similarity", "PEGASUS_Cosine Similarity", "T5_Cosine Similarity",
-        "BART_BERTScore", "PEGASUS_BERTScore", "T5_BERTScore"
+        "BART (Fine-tuned)_ROUGE-1", "PEGASUS_ROUGE-1", "T5_ROUGE-1",
+        "BART (Fine-tuned)_ROUGE-L", "PEGASUS_ROUGE-L", "T5_ROUGE-L",
+        "BART (Fine-tuned)_BLEU", "PEGASUS_BLEU", "T5_BLEU",
+        "BART (Fine-tuned)_Cosine Similarity", "PEGASUS_Cosine Similarity", "T5_Cosine Similarity",
+        "BART (Fine-tuned)_BERTScore", "PEGASUS_BERTScore", "T5_BERTScore"
     ]]
 
     plt.figure(figsize=(12, 8))

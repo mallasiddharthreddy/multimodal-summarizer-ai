@@ -1,5 +1,5 @@
 # NOTE: Streamlit and Whisper must be installed in your local environment. Run this app locally with:
-# pip install streamlit openai-whisper transformers sklearn rouge-score bert-score matplotlib torch fpdf python-docx textblob
+# pip install streamlit openai-whisper transformers sklearn bert-score matplotlib torch fpdf python-docx textblob
 
 import pandas as pd
 import tempfile
@@ -26,11 +26,6 @@ except ModuleNotFoundError:
     raise ImportError("The 'sklearn' module is not installed. Please run `pip install scikit-learn` in your terminal.")
 
 try:
-    from rouge_score import rouge_scorer
-except ModuleNotFoundError:
-    raise ImportError("The 'rouge-score' module is not installed. Please run `pip install rouge-score` in your terminal.")
-
-try:
     from bert_score import score as bertscore
 except ModuleNotFoundError:
     raise ImportError("The 'bert-score' module is not installed. Please run `pip install bert-score` in your terminal.")
@@ -51,7 +46,7 @@ except ModuleNotFoundError:
     raise ImportError("The 'python-docx' module is not installed. Run `pip install python-docx`.")
 
 # Loading summarization models 
-st.session_state.setdefault("bart", pipeline("summarization", model="facebook/bart-large-cnn"))
+st.session_state.setdefault("bart", pipeline("summarization", model="models/bart-meetingbank-finetuned", tokenizer="models/bart-meetingbank-finetuned"))
 st.session_state.setdefault("pegasus", pipeline("summarization", model="google/pegasus-xsum"))
 st.session_state.setdefault("t5", pipeline("summarization", model="t5-small"))
 
@@ -64,7 +59,7 @@ def chunk_text(text, max_tokens=1000):
 def get_summary(text, model_choice, max_len):
     summary_chunks = []
     for chunk in chunk_text(text):
-        if model_choice == "BART":
+        if model_choice == "BART (Fine-tuned)":
             s = st.session_state.bart(chunk, max_length=max_len, min_length=80, do_sample=False)[0]['summary_text']
         elif model_choice == "PEGASUS":
             s = st.session_state.pegasus(chunk, max_length=max_len, min_length=80, do_sample=False)[0]['summary_text']
@@ -75,17 +70,12 @@ def get_summary(text, model_choice, max_len):
 
 # Evaluation Metrics 
 def get_scores(original, summary):
-    rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
-    r_scores = rouge.score(original, summary)
-
     tfidf = TfidfVectorizer().fit_transform([original, summary])
     cos_sim = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
 
     P, R, F1 = bertscore([summary], [original], lang="en", verbose=False)
 
     return {
-        "ROUGE-1": round(r_scores['rouge1'].fmeasure, 4),
-        "ROUGE-L": round(r_scores['rougeL'].fmeasure, 4),
         "Cosine Similarity": round(cos_sim, 4),
         "BERTScore": round(F1[0].item(), 4)
     }
@@ -131,7 +121,7 @@ elif input_mode == "Document":
         st.session_state.transcript_text = transcript_text
 
 
-model_choice = st.selectbox("Choose a summarization model", ["BART", "PEGASUS", "T5"])
+model_choice = st.selectbox("Choose a summarization model", ["BART (Fine-tuned)", "PEGASUS", "T5"])
 
 
 max_len = st.slider("Summary length (max tokens)", 80, 400, 150)
@@ -184,7 +174,7 @@ if "transcript_text" in st.session_state and st.session_state.transcript_text an
 if compare_models and "transcript_text" in st.session_state and st.session_state.transcript_text:
     st.info("Generating summaries for all models...")
     results = {}
-    for model in ["BART", "PEGASUS", "T5"]:
+    for model in ["BART (Fine-tuned)", "PEGASUS", "T5"]:
         sm = get_summary(st.session_state.transcript_text, model, max_len)
         sc = get_scores(st.session_state.transcript_text, sm)
         results[model] = {"Summary": sm, **sc}
