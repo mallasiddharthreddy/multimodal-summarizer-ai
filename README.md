@@ -147,6 +147,10 @@ multimodal-summarizer-ai/
 
 ```
 
+The fine-tuned BART model (~500MB) can be downloaded from [Google Drive](https://drive.google.com/drive/folders/1xgx6-y8fumi1zS4DdcBTkkb-RUrLlG6c?usp=drive_link).  
+Place it inside: `models/bart-meetingbank-finetuned/`
+
+
 
 ## Setup & Installation
 
