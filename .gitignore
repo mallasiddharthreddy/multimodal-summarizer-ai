@@ -34,3 +34,4 @@ results/*.csv
 .cache/
 *.tmp
 *.bak
+models/bart-meetingbank-finetuned/
